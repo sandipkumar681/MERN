@@ -1,86 +1,127 @@
 import { useState } from "react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const info = {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+  const initialInfo = {
     name: "",
     email: "",
     password: "",
   };
-  const [data, setData] = useState(info);
-  //   const
+
+  const [data, setData] = useState(initialInfo);
+  const [error, setError] = useState(""); // For error handling
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password } = data;
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-    const json = await response.json();
-    console.log(json);
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v1/users/registeruser",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        }
+      );
+
+      const json = await response.json();
+
+      if (json.statusCode === 201) {
+        // Navigate to login page on successful signup
+        navigate("/login");
+      } else {
+        setError(json.message || "Signup failed. Please try again.");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred. Please try again later.");
+    }
   };
 
   const onChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
+
   return (
-    <div className="outerbox">
-      <div className="innerbox">
-        <h1>Get Started with iNoteBook</h1>
-        <form onSubmit={handleSubmit}>
-          <p>
-            <label htmlFor="exampleInputName">Enter Your Full Name</label>
-          </p>
-          <p>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-100 via-teal-200 to-teal-300">
+      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-semibold text-gray-800 text-center mb-6">
+          Get Started with iNoteBook
+        </h1>
+
+        {error && (
+          <div className="mb-4 text-red-500 text-sm text-center">{error}</div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Full Name
+            </label>
             <input
               type="text"
               name="name"
-              id="exampleInputName"
-              placeholder="Enter your name here"
+              id="name"
+              placeholder="Enter your full name"
               onChange={onChange}
               required
               minLength={3}
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500"
             />
-          </p>
-          <p>
-            <label htmlFor="exampleInputEmail1">Enter Email</label>
-          </p>
-          <p>
+          </div>
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
-              id="exampleInputEmail1"
-              placeholder="Enter your email here"
+              id="email"
+              placeholder="Enter your email"
               onChange={onChange}
               required
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500"
             />
-          </p>
-          <p>
-            <label htmlFor="exampleInputPassword">Enter Password</label>
-          </p>
-          <p>
+          </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
             <input
               type="password"
-              id="exampleInputPassword"
               name="password"
-              placeholder="Enter your password here"
+              id="password"
+              placeholder="Enter your password"
               onChange={onChange}
               required
               minLength={6}
+              className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500"
             />
-          </p>
-          <p>
-            <input type="submit" id="submit" value="SIGNUP" />
-          </p>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-teal-600 text-white py-2 px-4 rounded-lg shadow hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+          >
+            Sign Up
+          </button>
         </form>
-        <div className="footer">
-          <p>
-            Already have an Account? <Link to="/login">Login</Link>
-          </p>
+
+        <div className="mt-4 text-sm text-center text-gray-600">
+          Already have an account?{" "}
+          <Link to="/login" className="text-teal-600 hover:underline">
+            Login
+          </Link>
         </div>
       </div>
     </div>
@@ -88,41 +129,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-/*
-
-<form>
-        <div className="">
-          <p>
-            <label htmlFor="exampleInputEmail1">Email address</label>
-          </p>
-          <input
-            type="email"
-            className=""
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-          />
-          <p>
-            <small id="emailHelp" className="">
-              We'll never share your email with anyone else.
-            </small>
-          </p>
-        </div>
-        <p>
-          <div className="">
-            <label htmlFor="exampleInputPassword1">Password</label>
-            <input
-              type="password"
-              className=""
-              id="exampleInputPassword1"
-              placeholder="Password"
-            />
-          </div>
-        </p>
-        <p>
-          <button type="submit" className="">
-            Submit
-          </button>
-        </p>
-      </form>*/
