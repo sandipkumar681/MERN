@@ -69,12 +69,16 @@ const About = () => {
           Start using Cloud Notebook and enjoy secure, convenient access to all
           your notes!
         </p>
-        <Link
-          to="/signup"
-          className="mt-6 inline-block px-6 py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
-        >
-          Get Started
-        </Link>
+        {!localStorage.getItem("authToken") ? (
+          <Link
+            to="/signup"
+            className="mt-6 inline-block px-6 py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Get Started
+          </Link>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

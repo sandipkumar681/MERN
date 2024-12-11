@@ -1,9 +1,12 @@
-import dotenv from "dotenv";
-import connectToMongo from "./db/db.js";
-import app from "./app.js";
-dotenv.config({
-  path: "./.env",
-});
+// import dotenv from "dotenv";
+
+// dotenv.config({
+//   path: "./.env",
+// });
+import "./src/loadEnv.js";
+
+import connectToMongo from "./src/db/db.js";
+import app from "./src/app.js";
 
 connectToMongo()
   .then(() => {

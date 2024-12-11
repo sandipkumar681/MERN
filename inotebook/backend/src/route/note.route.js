@@ -1,5 +1,4 @@
 import express from "express";
-import Note from "../model/note.model.js";
 const router = express.Router();
 import { fetchUserDetails } from "../middleware/fetchUserDetails.middleware.js";
 import { body } from "express-validator";

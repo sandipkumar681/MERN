@@ -23,7 +23,10 @@ const registerUser = asyncHandler(async (req, res) => {
     let doesExistedUser = await User.findOne({ email });
 
     if (doesExistedUser) {
-      throw new apiError(400, "Email is already being used");
+      return res
+        .status(400)
+        .json(new apiResponse(400, {}, "Email is already being used"));
+      // throw new apiError(400, "Email is already being used");
     }
 
     //To send userInfo to mongoDB to create user
@@ -59,13 +62,19 @@ const loginUser = asyncHandler(async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-      throw new apiError(400, "User does not exists!");
+      return res
+        .status(400)
+        .json(new apiResponse(400, {}, "User does not exists!"));
+      // throw new apiError(400, "User does not exists!");
     }
 
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
     if (!isPasswordCorrect) {
-      throw new apiError(400, "Password is incorrect!");
+      return res
+        .status(400)
+        .json(new apiResponse(400, {}, "Password is incorrect!"));
+      // throw new apiError(400, "Password is incorrect!");
     }
 
     const accessToken = user.generateAccessToken();
@@ -115,16 +124,15 @@ const changePassword = asyncHandler(async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
 
-    //   if (oldPassword !== newPassword) {
-    //     throw new apiError(400, "Old and New password are not same!");
-    //   }
-
     const user = await User.findById(req.user._id);
 
     const isPasswordValid = await user.isPasswordCorrect(oldPassword);
 
     if (!isPasswordValid) {
-      throw new apiError(400, "Password is incorrect!");
+      return res
+        .status(400)
+        .json(new apiResponse(400, {}, "Password is incorrect!"));
+      // throw new apiError(400, "Password is incorrect!");
     }
 
     user.password = newPassword;

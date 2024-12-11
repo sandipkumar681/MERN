@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
   const initialInfo = {
     name: "",
     email: "",
@@ -10,14 +10,15 @@ const Signup = () => {
   };
 
   const [data, setData] = useState(initialInfo);
-  const [error, setError] = useState(""); // For error handling
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password } = data;
+
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/users/registeruser",
+        `${process.env.REACT_APP_SERVER_LINK}/api/v1/users/registeruser`,
         {
           method: "POST",
           headers: {
@@ -30,13 +31,12 @@ const Signup = () => {
       const json = await response.json();
 
       if (json.statusCode === 201) {
-        // Navigate to login page on successful signup
         navigate("/login");
       } else {
         setError(json.message || "Signup failed. Please try again.");
       }
     } catch (error) {
-      setError("An unexpected error occurred. Please try again later.");
+      console.error("Error:", error.message);
     }
   };
 

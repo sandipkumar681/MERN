@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { image1, image2, image3 } from "../Image";
 
 const Home = () => {
@@ -13,20 +12,7 @@ const Home = () => {
           A simple, beautiful, and secure cloud-based notebook to store your
           notes and ideas.
         </p>
-        <div className="flex justify-center space-x-6 mb-8">
-          <Link
-            to="/signup"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Sign Up
-          </Link>
-          <Link
-            to="/login"
-            className="bg-transparent text-blue-600 px-6 py-3 border-2 border-blue-600 rounded-lg shadow-md hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Log In
-          </Link>
-        </div>
+        <div className="flex justify-center space-x-6 mb-8"></div>
       </div>
 
       <div className="flex flex-wrap justify-center gap-6">

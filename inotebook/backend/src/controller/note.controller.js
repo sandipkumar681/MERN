@@ -34,26 +34,28 @@ const createNote = asyncHandler(async (req, res) => {
 
 const updateNote = asyncHandler(async (req, res) => {
   try {
-    const { updatedTitle, updatedDescription, updatedTag } = req.body;
-    const newNote = {};
-    if (updatedTitle) {
-      newNote.title = updatedTitle;
-    }
-    if (updatedDescription) {
-      newNote.description = updatedDescription;
-    }
-    if (updatedTag) {
-      newNote.tag = updatedTag;
-    }
     const doesNoteExists = await Note.findById(req.params.id);
 
     if (!doesNoteExists) {
-      throw new apiError(400, "Note does not exists!");
+      return res
+        .status(400)
+        .json(new apiResponse(400, {}, "Note does not exists!"));
+      // throw new apiError(400, "Note does not exists!");
     }
 
     if (doesNoteExists.user.toString() !== req.user._id) {
-      throw new apiError(400, "Not allowed!");
+      return res.status(401).json(new apiResponse(401, {}, "Not allowed!"));
+      // throw new apiError(400, );
     }
+    const { updatedTitle, updatedDescription, updatedTag } = req.body;
+
+    const newNote = {};
+
+    newNote.title = updatedTitle;
+
+    newNote.description = updatedDescription;
+
+    newNote.tag = updatedTag;
 
     const note = await Note.findByIdAndUpdate(
       req.params.id,
@@ -77,14 +79,17 @@ const deleteNote = asyncHandler(async (req, res) => {
     let doesNoteExists = await Note.findById(req.params.id);
 
     if (!doesNoteExists) {
-      throw new apiError(404, "Note does not exists");
+      return res
+        .status(404)
+        .json(new apiResponse(404, {}, "Note does not exists"));
+      // throw new apiError(404, "Note does not exists");
     }
 
     if (doesNoteExists.user.toString() !== req.user._id) {
-      return res.status(404).send("Not Allowed");
+      return res.status(401).json(new apiResponse(401, {}, "Not Allowed"));
     }
 
-    const note = await Note.findByIdAndDelete(req.params.id);
+    await Note.findByIdAndDelete(req.params.id);
 
     return res
       .status(200)

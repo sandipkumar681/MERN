@@ -14,7 +14,7 @@ const NoteState = (props) => {
   const fetchNote = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/notes/fetchaallnotes",
+        `${process.env.REACT_APP_SERVER_LINK}/api/v1/notes/fetchaallnotes`,
         {
           method: "GET",
           headers: {
@@ -24,7 +24,6 @@ const NoteState = (props) => {
       );
 
       const json = await response?.json();
-      console.log("Fetch Note called");
 
       if (json.statusCode === 200) {
         setNotes(json.data);
@@ -39,7 +38,7 @@ const NoteState = (props) => {
   const addNote = async (title, description, tag) => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/notes/createnote",
+        `${process.env.REACT_APP_SERVER_LINK}/api/v1/notes/createnote`,
         {
           method: "POST",
           headers: {
@@ -67,7 +66,7 @@ const NoteState = (props) => {
   const deleteNote = async (_id) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1/notes/deletenote/${_id}`,
+        `${process.env.REACT_APP_SERVER_LINK}/api/v1/notes/deletenote/${_id}`,
         {
           method: "DELETE",
           headers: {
@@ -97,7 +96,7 @@ const NoteState = (props) => {
       const { _id, updatedTitle, updatedDescription, updatedTag } = updatedNote;
 
       const response = await fetch(
-        `http://localhost:5000/api/v1/notes/updatenote/${_id}`,
+        `${process.env.REACT_APP_SERVER_LINK}/api/v1/notes/updatenote/${_id}`,
         {
           method: "PATCH",
           headers: {
@@ -136,7 +135,7 @@ const NoteState = (props) => {
   const logout = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/users/logoutuser",
+        `${process.env.REACT_APP_SERVER_LINK}/api/v1/users/logoutuser`,
         {
           method: "GET",
           headers: {

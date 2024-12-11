@@ -17,7 +17,7 @@ const Login = () => {
     const { email, password } = data;
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/users/loginuser",
+        `${process.env.REACT_APP_SERVER_LINK}/api/v1/users/loginuser`,
         {
           method: "POST",
           headers: {
@@ -38,7 +38,6 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error:", error.message);
-      setError("An unexpected error occurred. Please try again later.");
     }
   };
 

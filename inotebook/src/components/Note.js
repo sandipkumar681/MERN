@@ -11,11 +11,10 @@ const Note = () => {
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
-      console.log("Navigating to login");
       navigate("/login");
     } else {
       fetchNote();
-    }
+    } // eslint-disable-next-line
   }, [setNotes]);
 
   return (

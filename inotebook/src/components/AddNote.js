@@ -21,8 +21,6 @@ const AddNote = () => {
   };
 
   const onChange = (e) => {
-    // console.log(e);
-
     setNote({ ...note, [e.target.name]: e.target.value });
   };
 

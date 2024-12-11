@@ -7,13 +7,17 @@ const fetchUserDetails = (req, res, next) => {
     req.cookies?.accessToken ||
     req.header("Authorization")?.replace("Bearer ", "");
   if (!token) {
-    throw new apiError(400, "Authentication Failed!");
+    return res.status(400).json(new apiResponse(400, {}, "Token not Found!"));
+    // throw new apiError(400, "Authentication Failed!");
   }
   try {
     const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     if (!user) {
-      throw new apiError(400, "Unauthorised request!");
+      return res
+        .status(401)
+        .json(new apiResponse(401, {}, "Unauthorised request!"));
+      // throw new apiError(400, "Unauthorised request!");
     }
 
     //jsonwebtoken will return an object after successful verification
